@@ -1,0 +1,41 @@
+CREATE TABLE messages(results NUMBER);
+
+BEGIN
+FOR i IN 1..10 LOOP
+ IF i=6 or i=8 THEN
+   null;
+ ELSE
+   INSERT INTO messages(results) 
+   VALUES(i);
+ END IF;
+END LOOP;
+COMMIT;
+END;
+/
+
+SELECT * from messages;
+
+-----------------------------
+CREATE TABLE EMP2 AS SELECT * FROM EMPLOYEES;
+ALTER TABLE EMP2 ADD(STARS VARCHAR2(50));
+
+DECLARE
+   v_empno       EMP2.EMPLOYEE_ID%TYPE :=176;
+   v_asterisk    EMP2.STARS%TYPE:=NULL;
+   v_salary      EMP2.SALARY%TYPE;
+BEGIN
+   SELECT NVL(ROUND(salary/1000),0) INTO v_salary
+   FROM EMP2 WHERE EMPLOYEE_ID = v_empno;
+   FOR i IN 1..v_salary
+     LOOP
+   v_asterisk := v_asterisk || '*';
+     END LOOP;
+UPDATE emp2 SET stars = v_asterisk
+ where employee_id = v_empno;
+  COMMIT;
+END;
+/
+
+
+select employee_id, salary, stars from emp2
+where employee_id=176;

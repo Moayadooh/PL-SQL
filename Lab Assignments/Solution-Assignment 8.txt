@@ -1,0 +1,30 @@
+CREATE OR REPLACE FUNCTION valid_AcNo
+(p_AcNo IN registration.AcNo%TYPE)
+RETURN BOOLEAN IS
+v_dummy PLS_INTEGER;
+BEGIN
+SELECT acno INTO v_dummy FROM registration
+WHERE acno = p_acno;
+RETURN TRUE;
+
+EXCEPTION
+WHEN NO_DATA_FOUND THEN
+RETURN FALSE;
+END valid_AcNo;
+
+----------------------------------
+CREATE OR REPLACE PROCEDURE Deposit_Amt
+(p_dno  deposits.dno%TYPE,
+ p_Acno deposits.acno%TYPE,
+ p_damt deposits.damt%TYPE,
+ p_loc  deposits.dlocation%TYPE)
+IS
+BEGIN
+  IF valid_Acno(p_AcNo) THEN
+INSERT INTO Deposits
+VALUES (p_dno,p_Acno,sysdate,p_damt,p_loc);
+Commit;
+ELSE
+RAISE_APPLICATION_ERROR (-20204, 'Invalid Acno. Try again.');
+END IF;
+END Deposit_Amt;

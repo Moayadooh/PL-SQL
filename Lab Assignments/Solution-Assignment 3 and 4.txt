@@ -1,0 +1,32 @@
+SET SERVEROUTPUT ON
+DECLARE
+  v_countryid  countries.country_id%TYPE := UPPER( '&CountryID');
+  v_country_record countries%ROWTYPE;
+BEGIN
+  SELECT * INTO v_country_record FROM countries
+  WHERE country_id = v_countryid;
+  
+  DBMS_OUTPUT.PUT_LINE('Country Id:'||v_country_record.country_id ||
+'Country Name:'||v_country_record.country_name ||
+'Region Id:' || v_country_record.region_id);
+END;
+/
+--------------------------------------------
+DECLARE
+  v_deptno NUMBER:=&department_id;
+  CURSOR c_emp_cursor IS
+  SELECT last_name, salary, manager_id FROM employees   
+  WHERE department_id = v_deptno;
+BEGIN
+  FOR emp_record IN c_emp_cursor
+  LOOP
+  if emp_record.salary < 5000 AND (emp_record.manager_id = 101 
+  OR emp_record.manager_id = 124) THEN
+  DBMS_OUTPUT.PUT_LINE(emp_record.last_name ||' Due for a raise');
+  ELSE
+  DBMS_OUTPUT.PUT_LINE(emp_record.last_name ||' Not Due for a raise');
+  END IF;
+END LOOP;
+END;
+
+  

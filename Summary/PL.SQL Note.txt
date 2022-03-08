@@ -1,0 +1,131 @@
+
+
+https://vlearn.iitcoman.com
+username: muayad.mcd
+Password: Oman@2022
+
+DDL (Data Definition Language)
+DML (Data Manipulation Language)
+DCL (Data Control Language)
+TCL (Transaction Control Language)
+
+DDL: CREATE, ALTER, DROP, TRUNCATE
+DML: INSERT, UPDATE, DELETE, MERGE, SELECT
+DCL: GRANT, REVOKE privileges
+TCL: COMMIT, SAVEPOINT, ROLLBACK
+
+Select statements
+Aggregate functions
+Operators (arithmetic, relational or comparison, logical)
+sub-queries
+set operators
+joins (inner, outer, self, cross)
+grouping data, having clause
+managing data in different timezones
+
+Database Architecture:
+Oracle 11g Database = Single instance having one database only.
+Oracle server = Instance + Database
+Instance = Memory structures (SGA) + Background Processes
+
+Oracle Enterprise Manager Database Express Console is web based tool used by DBAs to monitor CDB and PDBs.
+
+https://localhost:5500/em
+
+
+
+Categories of data:
+-----------------------
+1. Structured Data: when data is in a standardized format, has a well-defined structure, complies to a data model.
+    Example: Excel files
+    Datatypes: BLOB
+
+2. Unstructured Data: data that doesn't fit in a spreadsheet with rows and columns.
+    Example: video
+    Datatypes: BLOB
+
+3. Semi-structured Data: data that does not conform to a data model but has some structure.
+    Example: emails, XML
+    Datatypes: VARCHAR
+
+4. Spatial Data: any type of data that directly or indirectly references a specific geographical area or location.
+    Example: geometric data in floor plans.
+    Datatypes: SDO_GEOMETRY
+	
+The MERGE statement selects rows from one table to update or insert into another table. 
+The decision whether to update or insert into the target table is based on a condition in the ON clause.
+Note: MERGE is a deterministic statement. 
+That is, you cannot update the same row of the target table multiple times in the same MERGE statement. 
+You must have INSERT and UPDATE object privileges on the target table and SELECT privilege on the source table.
+
+Complex Views: A view that is created from more than one table.
+
+Primary key vs Unique key:
+- Both of them contain unique values only, that means, no duplicate data in these columns which are declared as PK Or UNIQUE.
+- Primary key-one per table
+- Unique key - many per table
+- Primary key is NOT NULL by default
+- Unique key can contain NULL values
+- Unique keys are not linked to other tables.
+- Primary key is INDEXED by default.
+
+what is the purpose of indexing?
+to speed up searches in the tables.
+
+
+
+
+
+
+Stages before code executed:
+1- syntax check (parse)
+2- permession check
+3- compile
+4- execute
+
+in Procedures the first 3 stages are already done only we execute which result in imroved performacne
+
+RMI --> Remote Method Invocation (Java)
+RPC --> Remote Procedure call (Procedures)
+
+OLTP: Online Transaction Processing
+e,g; airline, banking, manpower, stock market, healthcare, hospitality
+Huge amount of DML every second
+need WRITE performance
+
+OLAP: Online Analytics Processing
+e,g. DSS
+need READ performance
+
+catproc.sql
+
+UNIFIED AUDITING
+
+- sqlldr
+- expdp
+- iompdp
+
+INSERT     UPDATE    DELETE
+NEW        OLD/NEW   OLD
+
+-Statement level trigger
+-row level trigger
+
+1-BEFORE statement trigger
+2-BEFORE row trigger
+3-AFTER row trigger
+4-AFTER statement trigger
+
+
+
+Download the following softwares:
+OracleLinux-R7-U9-Server-x86_64-dvd.iso:
+https://yum.oracle.com/oracle-linux-isos.html
+
+Oracle Linux Database Software:
+- V28802-01_1of2.zip
+- V28802-01_2of2.zip
+
+WinSCP Software (Transferring files from windows to Linux):
+https://sourceforge.net/projects/winscp/files/WinSCP/5.19.5/WinSCP-5.19.5-Setup.exe/download
+
