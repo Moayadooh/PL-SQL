@@ -1,0 +1,30 @@
+Contacts:
+Contact_ID, FirstName,Last_Name, Email, Phone, Customer_ID
+
+Customers:
+Customer_ID, Name, Address, Website, Credit_limit
+
+CREATE VIEW vw_customers AS
+    SELECT name,  address,  website,  credit_limit,  first_name, last_name,   email, phone 
+    FROM customers
+    INNER JOIN contacts USING (customer_id);
+
+INSERT INTO vw_customers( name,  address,  website,  credit_limit,  first_name, last_name,   email, phone)
+    VALUES('arif','muscat','www.arif.com',1000,'arif','ahmad','arif@hotmail.com',434343);
+
+CREATE OR REPLACE TRIGGER new_customer_trg
+    INSTEAD OF INSERT ON vw_customers
+    FOR EACH ROW
+DECLARE
+    l_customer_id NUMBER;
+BEGIN
+    -- insert a new customer first
+    INSERT INTO customers(name, address, website, credit_limit)
+    VALUES(:NEW.NAME, :NEW.address, :NEW.website, :NEW.credit_limit)
+    RETURNING customer_id INTO l_customer_id;
+    
+    -- insert the contact
+    INSERT INTO contacts(first_name, last_name, email, phone, customer_id)
+    VALUES(:NEW.first_name, :NEW.last_name, :NEW.email, :NEW.phone, l_customer_id);
+END;
+

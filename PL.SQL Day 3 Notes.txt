@@ -1,0 +1,204 @@
+--Cursor Example 1
+
+DECLARE
+  CURSOR c_emp_cursor IS 
+   SELECT employee_id, last_name FROM employees
+   WHERE department_id =30;
+  v_empno employees.employee_id%TYPE;
+  v_lname employees.last_name%TYPE;
+BEGIN
+  OPEN c_emp_cursor;
+  LOOP
+    FETCH c_emp_cursor INTO v_empno, v_lname;
+    EXIT WHEN c_emp_cursor%NOTFOUND;
+    DBMS_OUTPUT.PUT_LINE( v_empno ||'  '||v_lname);  
+  END LOOP;
+END;
+/
+
+--Cursors and Records using %ROWTYPE
+--Process the rows of the active set by fetching values into a PL/SQL record.
+
+DECLARE 
+  CURSOR c_emp_cursor IS 
+   SELECT employee_id, last_name FROM employees
+   WHERE  department_id =30;
+   v_emp_record	c_emp_cursor%ROWTYPE;
+BEGIN
+  OPEN c_emp_cursor;
+  LOOP
+    FETCH c_emp_cursor INTO v_emp_record;
+
+    EXIT WHEN c_emp_cursor%NOTFOUND;
+    DBMS_OUTPUT.PUT_LINE( v_emp_record.employee_id 
+                       ||' '||v_emp_record.last_name);    
+  END LOOP;
+  CLOSE c_emp_cursor;
+END;
+/
+
+--Cursor FOR Loops
+DECLARE
+  CURSOR c_emp_cursor IS 
+   SELECT employee_id, last_name FROM employees
+   WHERE department_id =30; 
+BEGIN
+   FOR emp_record IN c_emp_cursor 
+    LOOP
+     DBMS_OUTPUT.PUT_LINE( emp_record.employee_id      ||' ' ||emp_record.last_name);   
+    END LOOP; 
+END;
+/
+
+--%ROWCOUNT and %NOTFOUND: Example
+
+DECLARE
+  CURSOR c_emp_cursor IS SELECT employee_id, 
+    last_name FROM employees;
+  v_emp_record	c_emp_cursor%ROWTYPE;
+BEGIN
+  OPEN c_emp_cursor;
+  LOOP
+   FETCH c_emp_cursor INTO v_emp_record;
+   EXIT WHEN c_emp_cursor%ROWCOUNT > 10 OR  
+                     c_emp_cursor%NOTFOUND;        
+   DBMS_OUTPUT.PUT_LINE( v_emp_record.employee_id 
+               ||' '||v_emp_record.last_name);
+  END LOOP;
+  CLOSE c_emp_cursor;
+END ; 
+/
+
+
+
+
+--Cursor FOR Loops Using Subqueries
+--There is no need to declare the cursor.
+
+BEGIN
+  FOR emp_record IN (SELECT employee_id, last_name   FROM employees WHERE department_id =30)
+  LOOP
+   DBMS_OUTPUT.PUT_LINE( emp_record.employee_id 
+   ||' '||emp_record.last_name);   
+  END LOOP; 
+END;
+/
+
+
+
+SQL> select * from t8;
+
+       SNO CITY
+---------- --------------------
+         1 muscat
+         1 muscat
+         1 muscat
+         1 muscat
+         1 muscat
+         1 muscat
+         1 muscat
+         2 sur
+         3 saham
+
+9 rows selected.
+
+SQL> alter table t8 add constraint snopk_t8 primary key(sno);
+alter table t8 add constraint snopk_t8 primary key(sno)
+                              *
+ERROR at line 1:
+ORA-02437: cannot validate (SYS.SNOPK_T8) - primary key violated
+
+
+SQL> select rowid,sno,city from t8;
+
+ROWID                     SNO CITY
+------------------ ---------- --------------------
+AAAR5BAABAAAbxRAAA          1 muscat
+AAAR5BAABAAAbxRAAB          1 muscat
+AAAR5BAABAAAbxRAAC          1 muscat
+AAAR5BAABAAAbxRAAD          1 muscat
+AAAR5BAABAAAbxRAAE          1 muscat
+AAAR5BAABAAAbxRAAF          1 muscat
+AAAR5BAABAAAbxRAAG          1 muscat
+AAAR5BAABAAAbxRAAH          2 sur
+AAAR5BAABAAAbxRAAI          3 saham
+
+9 rows selected.
+
+SQL> delete from t8 where rowid not in('AAAR5BAABAAAbxRAAA')
+  2  and city='muscat';
+
+6 rows deleted.
+
+SQL> select * from t8;
+
+       SNO CITY
+---------- --------------------
+         1 muscat
+         2 sur
+         3 saham
+
+SQL> alter table t8 add constraint snopk_t8 primary key(sno);
+
+Table altered.
+
+SQL>
+
+
+
+--Nonpredefined Error Trapping: Example
+--To trap Oracle Server error 01400 (“cannot insert NULL”):
+
+DECLARE
+ e_insert_excep EXCEPTION;
+ PRAGMA EXCEPTION_INIT(e_insert_excep, -01400);
+BEGIN
+ INSERT INTO departments  (department_id, department_name) VALUES (280, NULL);
+EXCEPTION
+ WHEN e_insert_excep THEN
+   DBMS_OUTPUT.PUT_LINE('INSERT OPERATION FAILED');
+   DBMS_OUTPUT.PUT_LINE(SQLERRM);
+END;
+/
+
+
+--Functions for Trapping Exceptions
+
+DECLARE
+  error_code      NUMBER;
+  error_message   VARCHAR2(255);
+BEGIN
+...
+EXCEPTION
+...
+  WHEN OTHERS THEN
+    ROLLBACK;
+    error_code := SQLCODE ;
+    error_message := SQLERRM ;
+   INSERT INTO errors (e_user, e_date, error_code,
+   error_message) VALUES(USER,SYSDATE,error_code, 
+   error_message);
+END;
+/
+
+--Trapping User-Defined Exceptions
+DECLARE 
+  v_deptno NUMBER := 500;
+  v_name VARCHAR2(20) := 'Testing';
+  e_invalid_department EXCEPTION;
+BEGIN
+  UPDATE departments
+  SET department_name = v_name
+  WHERE department_id = v_deptno;
+  IF SQL%NOTFOUND THEN
+    RAISE e_invalid_department;
+  END IF;
+  COMMIT;
+EXCEPTION
+WHEN e_invalid_department THEN
+  DBMS_OUTPUT.PUT_LINE('No such department id.');
+END;
+/
+
+
+

@@ -1,0 +1,40 @@
+Download the following softwares:
+**************************************
+https://yum.oracle.com/oracle-linux-isos.html
+OracleLinux-R7-U9-Server-x86_64-dvd.iso
+
+Oracle Linux Database Software
+V28802-01_1of2.zip
+V28802-01_2of2.zip
+
+WinSCP sofware
+Transferring files from windows to Linux
+
+
+
+
+What is the purpose of Primary key and foreign key?
+Referential Integrity
+
+A child record cannot exist without having a parent record.
+
+
+OLAP and OLTP Systems...
+***************************
+Online Analytical Processing System 
+e,g. DSS
+need READ performance
+
+Online Transaction Processing System
+e,g; airline, banking, manpower, stock market, healthcare, hospitality
+Huge amount of DML every second
+need WRITE performance
+
+
+
+INSERT followed by UPDATE
+DELETE followed by INSERT
+INSERT followed by INSERT
+
+
+

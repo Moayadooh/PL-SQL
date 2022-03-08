@@ -1,0 +1,92 @@
+connect sys/oracle@sample as sysdba
+
+Step 1:
+*******
+Create a folder in C:\REPORTS
+
+CREATE DIRECTORY REPORTS_DIR AS 'C:\REPORTS';
+GRANT READ, WRITE ON DIRECTORY REPORTS_DIR TO public;
+
+Step 2:
+******
+
+connect hr/hr@sample
+
+CREATE OR REPLACE PROCEDURE employee_report(
+p_dir IN VARCHAR2, p_filename IN VARCHAR2) IS
+f UTL_FILE.FILE_TYPE;
+
+CURSOR cur_avg IS
+SELECT last_name, department_id, salary FROM employees ORDER BY department_id;
+
+BEGIN
+f := UTL_FILE.FOPEN(p_dir, p_filename,'W');
+UTL_FILE.PUT_LINE(f, 'Employees Report');
+
+UTL_FILE.PUT_LINE(f, 'REPORT GENERATED ON ' ||SYSDATE);
+
+UTL_FILE.NEW_LINE(f);
+
+FOR emp IN cur_avg
+LOOP
+UTL_FILE.PUT_LINE(f, emp.last_name || ' ' || emp.department_id || ' ' || emp.salary);
+
+--UTL_FILE.PUT_LINE(f,RPAD(emp.last_name, 30) || ' ' || LPAD(NVL(TO_CHAR(emp.department_id,'9999'),'-'), 5) || ' '||LPAD(TO_CHAR(emp.salary, '$99,999.00'), 12));
+
+END LOOP;
+UTL_FILE.NEW_LINE(f);
+UTL_FILE.PUT_LINE(f, '*** END OF REPORT ***');
+UTL_FILE.FCLOSE(f);
+
+END employee_report;
+/
+
+
+Step 3:
+*******
+EXECUTE employee_report('REPORTS_DIR','employee_report1.txt')
+
+Step 4:
+******
+Verify the file gets created in c:\reports
+open employee_report1.txt in notepad to see the results
+
+
+
+Example: 2
+
+
+declare
+cursor c is
+select * from hr.employees;
+v varchar2(100);
+f utl_file.file_type;
+
+file_name varchar2(100) := 'Data.xls';
+dir varchar2(50) := 'REPORTS_DIR';
+
+--select * from dba_directories
+
+begin
+
+
+f := utl_file.fopen(dir, file_name, 'W');
+
+v := 'EMPLOYEE_ID'||chr(9)||'FIRST_NAME'||chr(9)||'JOB_Id'||chr(9)||'SALARY'||chr(9)||'HIRE_DATE'||chr(9)||'DEPARTMENT_ID';
+utl_file.put_line(f, v);
+
+for i in c
+loop
+
+v := i.EMPLOYEE_ID||chr(9)||i.FIRST_NAME||chr(9)||i.job_ID||chr(9)||i.salary||chr(9)||i.hire_date||chr(9)||i.department_id;
+utl_file.put_line(f, v);
+
+end loop;
+utl_file.fclose(f);
+
+--utl_file.frename(dir, file_name, dir, replace(file_name, '.xls', '_')||to_char(sysdate, 'MMDDYY')||'.xls', false);
+
+utl_file.fcopy(dir, file_name, dir, replace(file_name, '.xls', '_')||to_char(sysdate, 'MMDDYY')||'.xls');
+
+end;
+/

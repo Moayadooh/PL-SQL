@@ -1,0 +1,367 @@
+Muayad Salim Said Al Falahi
+muayad@mcd.gov.om
+96430801
+
+https://vlearn.iitcoman.com
+username: muayad.mcd
+Password: Oman@2022
+
+
+Oracle Database 19c: Introduction to SQL
+************************************
+DDL: CREATE, ALTER, DROP, TRUNCATE
+DML: INSERT, UPDATE, DELETE, MERGE, SELECT
+DCL: GRANT, REVOKE privileges
+TCL: COMMIT, SAVEPOINT, ROLLBACK
+
+Select statements
+Aggregate functions
+Operators (arithmetic, relational or comparison, logical)
+sub-queries
+set operators
+joins (inner, outer, self, cross)
+grouping data, having clause
+managing data in different timezones
+
+
+Build an Oracle 19c Database Server:
+
+
+
+Learning Purpose: Virtualization Platform
+1. Oracle VirtualBox
+2. VMWare
+3. HyperV
+
+or
+you can physically install it on Windows OS directly.
+
+DB Architecture:
+Oracle 11g Database = Single instance having one database only.
+Oracle server = Instance + Database
+Instance = Memory structures (SGA) + Background Processes
+
+
+
+Tools to manage Oracle Database 19c:
+*********************************
+SQL Plus
+command line tool, which is always with you...
+
+Oracle Enterprise Manager Database Express Console
+web based tool used by DBAs to monitor CDB and PDBs.
+https://localhost:5500/em
+
+SQL Developer
+
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Sun Feb 13 11:29:45 2022
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+Enter user-name: sys as sysdba
+Enter password: oracle
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL> show con_name
+
+CON_NAME
+------------------------------
+CDB$ROOT
+
+SQL> show con_id
+
+CON_ID
+------------------------------
+1
+
+SQL> show pdbs
+
+    CON_ID CON_NAME                       OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+         2 PDB$SEED                       READ ONLY  NO
+         3 PDB1                           READ WRITE NO
+
+SQL> select name from v$database;
+
+NAME
+---------
+MCD
+
+SQL> select instance_name from v$instance;
+
+INSTANCE_NAME
+----------------
+mcd
+
+SQL> select name from v$datafile;
+
+NAME
+--------------------------------------------------------------------------------
+D:\ORACLE19C\ORADATA\MCD\SYSTEM01.DBF
+D:\ORACLE19C\ORADATA\MCD\SYSAUX01.DBF
+D:\ORACLE19C\ORADATA\MCD\UNDOTBS01.DBF
+D:\ORACLE19C\ORADATA\MCD\PDBSEED\SYSTEM01.DBF
+D:\ORACLE19C\ORADATA\MCD\PDBSEED\SYSAUX01.DBF
+D:\ORACLE19C\ORADATA\MCD\USERS01.DBF
+D:\ORACLE19C\ORADATA\MCD\PDBSEED\UNDOTBS01.DBF
+D:\ORACLE19C\ORADATA\MCD\PDB1\SYSTEM01.DBF
+D:\ORACLE19C\ORADATA\MCD\PDB1\SYSAUX01.DBF
+D:\ORACLE19C\ORADATA\MCD\PDB1\UNDOTBS01.DBF
+D:\ORACLE19C\ORADATA\MCD\PDB1\USERS01.DBF
+
+
+
+SQL> begin
+  2  insert into x values(1,'arif');
+  3  insert into x values(2,'ali');
+  4  commit;
+  5  end;
+  6  /
+
+PL/SQL procedure successfully completed.
+
+
+To print any text on the screen, we write 
+dbms_output.put_line('message');
+
+Make sure the serveroutput is on
+
+SQL>set serveroutput on;
+
+SQL> begin
+  2  dbms_output.put_line('My first program in PL/SQL');
+  3  dbms_output.put_line('**************************');
+  4  dbms_output.put_line('Learning is FUN...........');
+  5  end;
+  6  /
+
+PL/SQL procedure successfully completed.
+
+SQL> begin
+  2  dbms_output.put_line('My first program in PL/SQL');
+  3  dbms_output.put_line('**************************');
+  4  dbms_output.put_line('Learning is FUN...........');
+  5  end;
+  6  /
+
+My first program in PL/SQL
+**************************
+Learning is FUN...........
+
+PL/SQL procedure successfully completed.
+
+
+SQL> declare
+  2     v1  varchar(20);
+  3  begin
+  4     dbms_output.put_line(v1);
+  5  end;
+  6  /
+
+PL/SQL procedure successfully completed.
+
+
+
+
+SQL> declare
+  2     v1  varchar(20):='Arif';
+  3  begin
+  4     dbms_output.put_line(v1);
+  5  end;
+  6  /
+Arif
+
+PL/SQL procedure successfully completed.
+
+
+
+1  declare
+  2     v1  varchar(20):='Arif';
+  3  begin
+  4     dbms_output.put_line('Welcome  '|| v1);
+  5* end;
+
+Welcome  Arif
+
+
+--Program to add 2 numbers and display the result of those 2 numbers.
+
+declare
+   n1 number:=10;
+   n2 number:=20;
+   result number;
+begin
+   result := n1+n2;
+   dbms_output.put_line(result);
+end;
+/
+
+use ampersand & to accept the number from the user.
+
+declare
+   n1 number:=&n1;
+   n2 number:=&n2;
+   result number;
+begin
+   result := n1+n2;
+   dbms_output.put_line(result);
+end;
+/
+
+
+
+SQL> declare
+  2     n1 number:=&n1;
+  3     n2 number:=&n2;
+  4     result number;
+  5  begin
+  6     result := n1+n2;
+  7     dbms_output.put_line(result);
+  8  end;
+  9  /
+Enter value for n1: 500
+old   2:    n1 number:=&n1;
+new   2:    n1 number:=500;
+Enter value for n2: 600
+old   3:    n2 number:=&n2;
+new   3:    n2 number:=600;
+1100
+
+PL/SQL procedure successfully completed.
+
+SQL> set verify off
+SQL>
+SQL>
+SQL> declare
+  2     n1 number:=&n1;
+  3     n2 number:=&n2;
+  4     result number;
+  5  begin
+  6     result := n1+n2;
+  7     dbms_output.put_line(result);
+  8  end;
+  9  /
+Enter value for n1: 500
+Enter value for n2: 600
+1100
+
+PL/SQL procedure successfully completed.
+
+
+Environment variables: The setting stays untill the session is connected. If we disconnect from oracle, we will loose the setting..
+
+SET VERIFY ON (default)
+SET VERIFY OFF
+
+SET SERVEROUTPUT ON
+SET SERVEROUTPUT OFF (default)
+
+
+SQL> ed script1.sql
+
+SQL> ed script1.sql
+
+
+$ vi script.sh
+
+$ ./script.sh
+
+
+
+
+Default Constraint: column will have a value which you specify at the time of table creation.
+
+SQL> create table hello2(sno number primary key, city varchar(20) default 'Muscat',
+  2  salary number default 100);
+
+Table created.
+
+SQL> insert into hello2 (sno) values(1);
+
+1 row created.
+
+SQL> select * from hello2;
+
+       SNO CITY                     SALARY
+---------- -------------------- ----------
+         1 Muscat                      100
+
+SQL> insert into hello2 (sno,city) values(2,'Sur');
+
+1 row created.
+
+SQL> select * from hello2;
+
+       SNO CITY                     SALARY
+---------- -------------------- ----------
+         1 Muscat                      100
+         2 Sur                         100
+
+
+
+SQL> DECLARE
+  2    v_myName  VARCHAR(20);
+  3  BEGIN
+  4    DBMS_OUTPUT.PUT_LINE('My name is: '||v_myName );
+  5    v_myName  := 'John';
+  6    DBMS_OUTPUT.PUT_LINE('My name is: '||v_myName );
+  7  END;
+  8  /
+My name is:
+My name is: John
+
+PL/SQL procedure successfully completed.
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1  DECLARE
+  2    v_myName  VARCHAR(20):='Arif';
+  3  BEGIN
+  4    DBMS_OUTPUT.PUT_LINE('My name is: '||v_myName );
+  5    v_myName  := 'John';
+  6    DBMS_OUTPUT.PUT_LINE('My name is: '||v_myName );
+  7* END;
+SQL> /
+My name is: Arif
+My name is: John
+
+PL/SQL procedure successfully completed.
+
+
+
+DECLARE
+   v_salary number;
+   v_fname  varchar(20);
+   v_empno  number:=&employee_id;
+BEGIN
+   SELECT salary, first_name INTO v_salary, v_fname
+   FROM employees WHERE employee_id=v_empno;
+   dbms_output.put_line('Name is :' || v_fname);
+   dbms_output.put_line('Salary = :' || v_salary);
+END;
+/
+
+
+use %TYPE attribute while declaring variables in the PL/SQL programs.
+
+
+DECLARE
+   v_salary employees.salary%TYPE;
+   v_fname  employees.first_name%TYPE;
+   v_empno  employees.employee_id%TYPE:=&employee_id;
+BEGIN
+   SELECT salary, first_name INTO v_salary, v_fname
+   FROM employees WHERE employee_id=v_empno;
+   dbms_output.put_line('Name is :' || v_fname);
+   dbms_output.put_line('Salary = :' || v_salary);
+END;
+/
+
+
+

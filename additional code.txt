@@ -1,0 +1,76 @@
+SQL> connect said/1@pdb1
+Connected.
+SQL> select * from ali.t2;
+
+       SNO
+----------
+       333
+
+SQL> insert into ali.t2 values(1);
+
+1 row created.
+
+SQL> select * from ali.t2;
+
+       SNO
+----------
+       333
+         1
+
+SQL> commit;
+
+Commit complete.
+
+
+SQL> show user
+USER is "ALI"
+SQL> select * from t2;
+
+       SNO
+----------
+       333
+
+SQL> select * from t2;
+
+       SNO
+----------
+       333
+         1
+
+
+SQL> alter table t2 add(salary number);
+
+Table altered.
+
+SQL> revoke insert,update,delete, select on t2 from endusers;
+
+Revoke succeeded.
+
+SQL> grant update (salary) on t2 to endusers;
+
+Grant succeeded.
+
+SQL> grant update (salary), select on t2 to endusers;
+
+Grant succeeded.
+
+SQL> select * from ali.t2;
+
+       SNO     SALARY
+---------- ----------
+       333
+       123
+
+SQL> update ali.t2 set salary = 4000 where sno=333;
+
+1 row updated.
+
+SQL> update ali.t2 set sno = 4000 where sno=333;
+update ali.t2 set sno = 4000 where sno=333
+           *
+ERROR at line 1:
+ORA-01031: insufficient privileges
+
+Endusers cannot update other columns except salary column.
+They cannot perform delete or insert operations....
+
