@@ -1,4 +1,17 @@
 
+--connect ali/1@pdb1
+--connect hr/hr@pdb1
+
+--ed
+--ed insteadoftrig
+--@trig
+--show errors
+
+--spool on
+--spool off
+
+
+
 --Database Architecture
 show con_name;
 show con_id;
